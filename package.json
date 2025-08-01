@@ -1,0 +1,41 @@
+{
+  "name": "intern-onboarding",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "cds run",
+    "watch": "cds watch",
+    "build": "cds build",
+    "deploy": "cds deploy",
+    "test": "jest",
+    "test-openai": "node test-openai.js",
+    "watch-project1": "cds watch --open project1/webapp/index.html?sap-ui-xx-viewCache=false"
+  },
+  "keywords": [
+    "sap",
+    "cap",
+    "intern",
+    "onboarding"
+  ],
+  "author": "",
+  "license": "ISC",
+  "description": "SAP CAP application for intern onboarding management",
+  "dependencies": {
+    "@cap-js/sqlite": "^2.0.2",
+    "@google/generative-ai": "^0.24.1",
+    "@sap/cds": "^9.1.0",
+    "@sap/cds-dk": "^9.1.2",
+    "dotenv": "^17.2.1",
+    "sqlite3": "^5.1.7"
+  },
+  "cds": {
+    "requires": {
+      "db": {
+        "kind": "sqlite",
+        "credentials": {
+          "url": "db/intern-onboarding.db"
+        }
+      }
+    }
+  }
+}

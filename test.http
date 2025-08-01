@@ -1,0 +1,132 @@
+
+@server = http://localhost:4004
+@auth = 
+
+### Get all services
+GET {{server}}/
+
+### ========== INTERN SERVICE CRUD OPERATIONS ==========
+
+### Get all interns
+GET {{server}}/odata/v4/intern-onboarding/Interns
+{{auth}}
+
+### Get specific intern by ID
+GET {{server}}/odata/v4/intern-onboarding/Interns/1
+{{auth}}
+
+### Create new intern
+POST {{server}}/odata/v4/intern-onboarding/Interns
+Content-Type: application/json
+{{auth}}
+
+{
+  "firstName": "David",
+  "lastName": "Johnson",
+  "email": "david.johnson@company.com",
+  "department": "Software Engineering",
+  "startDate": "2024-02-15",
+  "status": "Active",
+  "mentor_ID": "1"
+}
+
+### Update intern (PATCH)
+PATCH {{server}}/odata/v4/intern-onboarding/Interns/1
+Content-Type: application/json
+{{auth}}
+
+{
+  "status": "Completed",
+  "department": "DevOps"
+}
+
+### Delete intern
+DELETE {{server}}/odata/v4/intern-onboarding/Interns/3
+{{auth}}
+
+### ========== TASKS CRUD OPERATIONS ==========
+
+### Get all tasks
+GET {{server}}/odata/v4/intern-onboarding/Tasks
+{{auth}}
+
+### Create new task
+POST {{server}}/odata/v4/intern-onboarding/Tasks
+Content-Type: application/json
+{{auth}}
+
+{
+  "title": "Code Review Training",
+  "description": "Learn code review best practices",
+  "intern_ID": "1",
+  "status": "Pending",
+  "priority": "Medium",
+  "estimatedHours": 4,
+  "dueDate": "2024-03-15"
+}
+
+### Update task status
+PATCH {{server}}/odata/v4/intern-onboarding/Tasks/1
+Content-Type: application/json
+{{auth}}
+
+{
+  "status": "Completed"
+}
+
+### ========== MENTORS CRUD OPERATIONS ==========
+
+### Get all mentors
+GET {{server}}/odata/v4/intern-onboarding/Mentors
+{{auth}}
+
+### Create new mentor
+POST {{server}}/odata/v4/intern-onboarding/Mentors
+Content-Type: application/json
+{{auth}}
+
+{
+  "firstName": "Emma",
+  "lastName": "Wilson",
+  "email": "emma.wilson@company.com",
+  "department": "Data Science"
+}
+
+### ========== AI SERVICE OPERATIONS ==========
+
+### Generate welcome message
+POST {{server}}/odata/v4/ai/generateWelcomeMessage
+Content-Type: application/json
+{{auth}}
+
+{
+  "internId": "1"
+}
+
+### Generate learning plan
+POST {{server}}/odata/v4/ai/generateLearningPlan
+Content-Type: application/json
+{{auth}}
+
+{
+  "internId": "1"
+}
+
+### ========== QUERY OPERATIONS ==========
+
+### Get interns with their mentors (expand)
+GET {{server}}/odata/v4/intern-onboarding/Interns?$expand=mentor
+{{auth}}
+
+### Get tasks for specific intern
+GET {{server}}/odata/v4/intern-onboarding/Tasks?$filter=intern_ID eq 1
+{{auth}}
+
+### Get interns by department
+GET {{server}}/odata/v4/intern-onboarding/Interns?$filter=department eq 'Software Engineering'
+{{auth}}
+
+### Count total interns
+GET {{server}}/odata/v4/intern-onboarding/Interns/$count
+{{auth}}
+

@@ -1,0 +1,4 @@
+ID,title,description,intern_ID,status,priority,estimatedHours,dueDate
+1,Setup Development Environment,Install required tools and configure workspace,1,In Progress,High,8,2024-02-15
+2,Complete Onboarding Training,Finish all mandatory training modules,2,Pending,Medium,16,2024-02-20
+3,First Project Assignment,Work on initial project task,1,Pending,Medium,40,2024-03-01

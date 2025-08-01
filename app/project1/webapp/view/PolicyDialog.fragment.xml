@@ -1,0 +1,67 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+    <Dialog id="policyDialog" title="Company Policies" contentWidth="800px" contentHeight="600px" resizable="true">
+        <content>
+            <VBox id="policyContainer" class="sapUiMediumMargin">
+                <!-- Policy Categories -->
+                <Panel id="policyCategoriesPanel" headerText="Policy Categories" class="sapUiMediumMarginBottom">
+                    <content>
+                        <List id="policyCategoriesList" items="{/policyCategories}" mode="SingleSelect" selectionChange="onPolicyCategorySelect">
+                            <CustomListItem id="policyCategoryItem" type="Active">
+                                <content>
+                                    <HBox id="policyItemBox" alignItems="Center" class="sapUiMediumMargin">
+                                        <core:Icon id="policyItemIcon" src="{icon}" size="2rem" color="#0070f2" class="sapUiMediumMarginEnd"/>
+                                        <VBox id="policyItemInfo" class="sapUiMediumMarginEnd">
+                                            <Title id="policyItemTitle" text="{title}" level="H5"/>
+                                            <Text id="policyItemDesc" text="{description}" class="sapUiContentLabelColor sapUiTinyMarginTop"/>
+                                        </VBox>
+                                        <ToolbarSpacer id="policyItemSpacer"/>
+                                        <VBox id="policyItemStatus" alignItems="End">
+                                            <ObjectStatus id="policyStatus" text="{status}" state="{path: 'status', formatter: '.formatPolicyStatus'}"/>
+                                            <Text id="policyLastAccessed" text="Last: {lastAccessed}" class="sapUiContentLabelColor sapUiTinyMarginTop"/>
+                                        </VBox>
+                                    </HBox>
+                                </content>
+                            </CustomListItem>
+                        </List>
+                    </content>
+                </Panel>
+
+                <!-- Policy Content -->
+                <Panel id="policyContentPanel" headerText="Policy Details" class="sapUiMediumMarginBottom">
+                    <content>
+                        <ScrollContainer id="policyScrollContainer" height="350px" class="sapUiMediumMargin">
+                            <VBox id="policyContentBox">
+                                <Title id="policyTitle" text="{/selectedPolicy/title}" level="H3" class="sapUiMediumMarginBottom"/>
+                                <HBox id="policyMetaBox" class="sapUiMediumMarginBottom">
+                                    <VBox id="policyVersionBox" class="sapUiMediumMarginEnd">
+                                        <Text id="policyVersion" text="Version: {/selectedPolicy/version}" class="sapUiContentLabelColor"/>
+                                        <Text id="policyEffectiveDate" text="Effective: {/selectedPolicy/effectiveDate}" class="sapUiContentLabelColor"/>
+                                    </VBox>
+                                    <VBox id="policyUpdateBox">
+                                        <Text id="policyLastUpdated" text="Last Updated: {/selectedPolicy/lastUpdated}" class="sapUiContentLabelColor"/>
+                                    </VBox>
+                                </HBox>
+                                <Text id="policyDescription" text="{/selectedPolicy/content}" class="sapUiMediumMarginBottom" renderWhitespace="true"/>
+                            </VBox>
+                        </ScrollContainer>
+                    </content>
+                </Panel>
+
+                <!-- Acknowledgment Section -->
+                <Panel id="acknowledgmentPanel" headerText="Acknowledgment" visible="{/selectedPolicy/requiresAcknowledgment}">
+                    <content>
+                        <VBox id="acknowledgmentBox" class="sapUiMediumMargin">
+                            <CheckBox id="acknowledgmentCheckbox" text="I have read and understood this policy" select="onAcknowledgmentChange"/>
+                            <Button id="acknowledgeBtn" text="Acknowledge Policy" type="Emphasized" press="onAcknowledgePolicy" enabled="{/acknowledgmentEnabled}" class="sapUiTinyMarginTop"/>
+                        </VBox>
+                    </content>
+                </Panel>
+            </VBox>
+        </content>
+        <endButton>
+            <Button id="closePolicyBtn" text="Close" press="onClosePolicyDialog"/>
+        </endButton>
+    </Dialog>
+</core:FragmentDefinition>

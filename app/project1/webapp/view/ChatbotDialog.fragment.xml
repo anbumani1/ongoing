@@ -1,0 +1,120 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+    <Dialog id="chatbotDialog" title="🤖 AI Onboarding Assistant" contentWidth="600px" contentHeight="700px" resizable="true" draggable="true">
+        <content>
+            <VBox id="chatbotContainer" class="sapUiNoMargin">
+                <!-- Chat Header -->
+                <Panel id="chatHeaderPanel" class="chatHeader">
+                    <content>
+                        <HBox id="chatHeaderBox" justifyContent="SpaceBetween" alignItems="Center" class="sapUiMediumMargin">
+                            <VBox id="assistantInfo">
+                                <Title id="assistantTitle" text="AI Onboarding Assistant" level="H4"/>
+                                <Text id="assistantStatus" text="🟢 Online - Powered by Google Gemini!" class="sapUiContentLabelColor"/>
+                            </VBox>
+                            <VBox id="chatStats" alignItems="End">
+                                <Text id="chatTime" text="{/chatSession/startTime}" class="sapUiContentLabelColor"/>
+                                <Text id="messageCount" text="{/chatSession/messageCount} messages" class="sapUiContentLabelColor"/>
+                            </VBox>
+                        </HBox>
+                    </content>
+                </Panel>
+
+                <!-- Chat Messages Area -->
+                <ScrollContainer id="chatMessagesContainer" height="450px" vertical="true" class="chatMessagesArea">
+                    <VBox id="chatMessagesBox" class="sapUiMediumMargin">
+                        <!-- Welcome Message -->
+                        <HBox id="welcomeMessageBox" class="chatMessage aiMessage" justifyContent="Start">
+                            <core:Icon id="aiAvatar" src="sap-icon://robot" size="2rem" color="#0070f2" class="chatAvatar"/>
+                            <VBox id="welcomeContent" class="chatMessageContent">
+                                <Text id="welcomeText" text="Hello! 👋 I'm your AI Onboarding Assistant powered by Google Gemini. I'm here to help you with questions about your role, learning resources, company policies, and any other onboarding topics. How can I assist you today?" class="chatMessageText"/>
+                                <Text id="welcomeTime" text="{/chatSession/startTime}" class="chatMessageTime"/>
+                            </VBox>
+                        </HBox>
+
+                        <!-- Dynamic Messages List -->
+                        <List id="dynamicMessages" items="{/chatMessages}" showNoData="false">
+                            <CustomListItem id="messageListItem">
+                                <!-- User Messages -->
+                                <HBox id="userMsgBox" class="chatMessage userMessage" justifyContent="End" visible="{= ${type} === 'user'}">
+                                    <VBox id="userMsgContent" class="chatMessageContent userMessageContent">
+                                        <Text id="userMsgText" text="{message}" class="chatMessageText"/>
+                                        <Text id="userMsgTime" text="{timestamp}" class="chatMessageTime"/>
+                                    </VBox>
+                                    <core:Icon id="userMsgAvatar" src="sap-icon://person-placeholder" size="2rem" color="#107e3e" class="chatAvatar"/>
+                                </HBox>
+
+                                <!-- AI Messages -->
+                                <HBox id="aiMsgBox" class="chatMessage aiMessage" justifyContent="Start" visible="{= ${type} === 'ai'}">
+                                    <core:Icon id="aiMsgIcon" src="sap-icon://robot" size="2rem" color="#0070f2" class="chatAvatar"/>
+                                    <VBox id="aiMsgContent" class="chatMessageContent">
+                                        <Text id="aiMsgText" text="{message}" class="chatMessageText" renderWhitespace="true"/>
+                                        <Text id="aiMsgTime" text="{timestamp}" class="chatMessageTime"/>
+                                    </VBox>
+                                </HBox>
+                            </CustomListItem>
+                        </List>
+
+                        <!-- Typing Indicator -->
+                        <HBox id="typingIndicator" class="chatMessage aiMessage typingIndicator" justifyContent="Start" visible="{/isTyping}">
+                            <core:Icon id="typingIcon" src="sap-icon://robot" size="2rem" color="#0070f2" class="chatAvatar"/>
+                            <VBox id="typingContentBox" class="chatMessageContent">
+                                <Text id="typingTextMsg" text="Google Gemini is thinking..." class="chatMessageText typingText"/>
+                            </VBox>
+                        </HBox>
+                    </VBox>
+                </ScrollContainer>
+
+                <!-- Chat Input Area -->
+                <Panel id="chatInputPanel" class="chatInputArea">
+                    <content>
+                        <HBox id="chatInputBox" class="sapUiMediumMargin">
+                            <Input id="chatInput" 
+                                   placeholder="Type your message here... (e.g., 'Help with my tasks', 'Learning recommendations', 'Company policies')" 
+                                   value="{/currentMessage}" 
+                                   submit="onSendMessage" 
+                                   class="chatInputField"
+                                   enabled="{= !${/isTyping}}"
+                                   maxLength="500"/>
+                            <Button id="sendButton" 
+                                    text="Send" 
+                                    type="Emphasized" 
+                                    press="onSendMessage" 
+                                    icon="sap-icon://paper-plane"
+                                    enabled="{= !${/isTyping} &amp;&amp; ${/currentMessage}.length > 0}"
+                                    class="sapUiTinyMarginBegin"/>
+                        </HBox>
+                        
+                        <!-- Quick Action Buttons -->
+                        <HBox id="quickActionsBox" wrap="Wrap" class="sapUiMediumMargin sapUiTinyMarginTop">
+                            <Button id="taskHelpBtn" text="📋 Task Help" press="onQuickAction" type="Transparent" class="quickActionBtn">
+                                <customData>
+                                    <core:CustomData key="message" value="I need help with my current tasks"/>
+                                </customData>
+                            </Button>
+                            <Button id="learningBtn" text="🎓 Learning" press="onQuickAction" type="Transparent" class="quickActionBtn">
+                                <customData>
+                                    <core:CustomData key="message" value="What learning resources do you recommend for me?"/>
+                                </customData>
+                            </Button>
+                            <Button id="policiesBtn" text="📚 Policies" press="onQuickAction" type="Transparent" class="quickActionBtn">
+                                <customData>
+                                    <core:CustomData key="message" value="Tell me about important company policies"/>
+                                </customData>
+                            </Button>
+                            <Button id="supportBtn" text="🤝 Support" press="onQuickAction" type="Transparent" class="quickActionBtn">
+                                <customData>
+                                    <core:CustomData key="message" value="How can I get help and support?"/>
+                                </customData>
+                            </Button>
+                        </HBox>
+                    </content>
+                </Panel>
+            </VBox>
+        </content>
+        <beginButton>
+            <Button id="clearChatBtn" text="Clear Chat" press="onClearChat" icon="sap-icon://delete"/>
+        </beginButton>
+        <endButton>
+            <Button id="closeChatBtn" text="Close" press="onCloseChatbot"/>
+        </endButton>
+    </Dialog>
+</core:FragmentDefinition>

@@ -1,0 +1,47 @@
+<mvc:View controllerName="project1.controller.EmployeeDashboard"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m">
+    <Page id="simplePage" title="Employee Dashboard - Test" class="sapUiContentPadding">
+        <content>
+            <!-- Simple Welcome Section -->
+            <Panel id="simpleWelcomePanel" headerText="Welcome" class="sapUiMediumMarginBottom">
+                <content>
+                    <VBox id="simpleWelcomeBox" class="sapUiMediumMargin">
+                        <Title id="simpleWelcomeTitle" text="Hello, {/employee/firstName} {/employee/lastName}!" level="H2"/>
+                        <Text id="simpleWelcomeText" text="Department: {/employee/department}"/>
+                        <Text id="simpleRoleText" text="Role: {/employee/role}"/>
+                    </VBox>
+                </content>
+            </Panel>
+
+            <!-- Simple Stats -->
+            <Panel id="simpleStatsPanel" headerText="Quick Stats" class="sapUiMediumMarginBottom">
+                <content>
+                    <HBox id="simpleStatsBox" class="sapUiMediumMargin">
+                        <VBox id="simpleTasksBox" class="sapUiMediumMarginEnd">
+                            <ObjectNumber id="simpleTasksNumber" number="{/dashboardStats/tasksCompleted}" unit="Tasks Completed"/>
+                        </VBox>
+                        <VBox id="simpleCoursesBox" class="sapUiMediumMarginEnd">
+                            <ObjectNumber id="simpleCoursesNumber" number="{/dashboardStats/coursesInProgress}" unit="Courses"/>
+                        </VBox>
+                        <VBox id="simpleCertificatesBox">
+                            <ObjectNumber id="simpleCertificatesNumber" number="{/dashboardStats/certificatesEarned}" unit="Certificates"/>
+                        </VBox>
+                    </HBox>
+                </content>
+            </Panel>
+
+            <!-- Simple Actions -->
+            <Panel id="simpleActionsPanel" headerText="Quick Actions">
+                <content>
+                    <VBox id="simpleActionsBox" class="sapUiMediumMargin">
+                        <Button id="simplePolicyBtn" text="View Policies" press="onPolicyAccess" class="sapUiTinyMarginBottom"/>
+                        <Button id="simpleLearningBtn" text="Learning Path" press="onLearningPath" class="sapUiTinyMarginBottom"/>
+                        <Button id="simpleNotesBtn" text="My Notes" press="onNotesAccess" class="sapUiTinyMarginBottom"/>
+                        <Button id="simpleProfileBtn" text="My Profile" press="onProfileAccess"/>
+                    </VBox>
+                </content>
+            </Panel>
+        </content>
+    </Page>
+</mvc:View>

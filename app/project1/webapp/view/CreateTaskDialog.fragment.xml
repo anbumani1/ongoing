@@ -1,0 +1,53 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:f="sap.ui.layout.form">
+    <Dialog id="createTaskDialog" title="Create New Task" contentWidth="500px" contentHeight="600px">
+        <content>
+            <f:SimpleForm id="taskForm" editable="true" layout="ResponsiveGridLayout" columnsL="1" columnsM="1">
+                <f:content>
+                    <Label id="titleLabel" text="Title*" required="true"/>
+                    <Input id="titleInput" value="{/title}" placeholder="Enter task title" required="true"/>
+
+                    <Label id="descLabel" text="Description"/>
+                    <TextArea id="descriptionInput" value="{/description}" placeholder="Enter task description" rows="3"/>
+
+                    <Label id="internLabel" text="Assigned Intern*" required="true"/>
+                    <ComboBox id="internCombo" selectedKey="{/intern_ID}" placeholder="Select intern"
+                              items="{interns>/}">
+                        <core:Item id="internItem" key="{interns>ID}" text="{interns>firstName} {interns>lastName}"/>
+                    </ComboBox>
+
+                    <Label id="priorityLabel" text="Priority"/>
+                    <ComboBox id="priorityCombo" selectedKey="{/priority}">
+                        <core:Item id="priorityHigh" key="High" text="High"/>
+                        <core:Item id="priorityMedium" key="Medium" text="Medium"/>
+                        <core:Item id="priorityLow" key="Low" text="Low"/>
+                    </ComboBox>
+
+                    <Label id="statusLabel" text="Status"/>
+                    <ComboBox id="statusCombo" selectedKey="{/status}">
+                        <core:Item id="statusPending" key="Pending" text="Pending"/>
+                        <core:Item id="statusInProgress" key="In Progress" text="In Progress"/>
+                        <core:Item id="statusCompleted" key="Completed" text="Completed"/>
+                    </ComboBox>
+
+                    <Label id="hoursLabel" text="Estimated Hours"/>
+                    <Input id="hoursInput" value="{/estimatedHours}" type="Number" placeholder="Enter estimated hours"/>
+
+                    <Label id="dueDateLabel" text="Due Date"/>
+                    <DatePicker id="dueDatePicker" value="{/dueDate}" placeholder="Select due date"/>
+
+                    <Label id="deptLabel" text="Department"/>
+                    <Input id="departmentInput" value="{/department}" placeholder="Enter department"/>
+                </f:content>
+            </f:SimpleForm>
+        </content>
+        <beginButton>
+            <Button id="createBtn" text="Create" type="Emphasized" press="onCreateTask"/>
+        </beginButton>
+        <endButton>
+            <Button id="cancelBtn" text="Cancel" press="onCancelCreateTask"/>
+        </endButton>
+    </Dialog>
+</core:FragmentDefinition>

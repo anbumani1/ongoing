@@ -1,0 +1,99 @@
+<mvc:View controllerName="project1.controller.EmployeeDashboard"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    displayBlock="true">
+    <Page id="employeePage" title="Employee Dashboard" class="sapUiContentPadding">
+        <content>
+            <!-- Main Layout with Navigation Pane -->
+            <HBox id="mainLayout" class="sapUiNoMargin">
+                <!-- Left Navigation Pane -->
+                <VBox id="navigationPane" width="280px" class="navPane">
+                    <!-- Navigation Header -->
+                    <VBox id="navHeader" class="navHeader">
+                        <Title id="navTitle" text="Navigation" level="H4" class="navHeaderTitle"/>
+                        <Text id="navSubtitle" text="Employee Portal" class="navHeaderSubtitle"/>
+
+                        <!-- Main Chatbot Button -->
+                        <Button id="mainChatbotBtn" text="🤖 AI Assistant Chat" press="onOpenChatbot" type="Emphasized" width="100%" class="sapUiMediumMarginTop mainChatbotButton"/>
+                    </VBox>
+
+                    <!-- Navigation Menu -->
+                    <VBox id="navMenuContainer" class="navMenuContainer">
+                        <!-- Main Actions -->
+                        <VBox id="mainActionsGroup" class="navGroup">
+                            <Text id="mainActionsLabel" text="MAIN ACTIONS" class="navGroupLabel"/>
+                            <Button id="policyNavItem" text="Company Policies" press="onPolicyAccess" icon="sap-icon://document" class="navItem"/>
+                            <Button id="learningNavItem" text="Learning Path" press="onLearningPath" icon="sap-icon://learning-assistant" class="navItem"/>
+                            <Button id="notesNavItem" text="My Notes" press="onNotesAccess" icon="sap-icon://notes" class="navItem"/>
+                            <Button id="profileNavItem" text="My Profile" press="onProfileAccess" icon="sap-icon://person-placeholder" class="navItem"/>
+                        </VBox>
+
+                        <!-- Support -->
+                        <VBox id="supportGroup" class="navGroup">
+                            <Text id="supportLabel" text="SUPPORT" class="navGroupLabel"/>
+                            <Button id="helpNavItem" text="Help &amp; Support" press="onHelpAccess" icon="sap-icon://sys-help" class="navItem"/>
+                            <Button id="feedbackNavItem" text="Feedback" press="onFeedbackAccess" icon="sap-icon://feedback" class="navItem"/>
+                        </VBox>
+
+                        <!-- AI Assistant -->
+                        <VBox id="aiGroup" class="navGroup">
+                            <Text id="aiLabel" text="AI ASSISTANT" class="navGroupLabel"/>
+                            <Button id="aiRecommendationsItem" text="AI Learning Recommendations" press="onGetAIRecommendations" icon="sap-icon://learning-assistant" class="navItem"/>
+                            <Button id="aiTaskHelpItem" text="AI Task Help" press="onGetAITaskHelp" icon="sap-icon://sys-help-2" class="navItem"/>
+                        </VBox>
+
+                        <!-- Settings -->
+                        <VBox id="settingsGroup" class="navGroup">
+                            <Text id="settingsLabel" text="SETTINGS" class="navGroupLabel"/>
+                            <Button id="settingsNavItem" text="Settings" press="onSettingsAccess" icon="sap-icon://action-settings" class="navItem"/>
+                            <Button id="logoutNavItem" text="Logout" press="onLogout" icon="sap-icon://log" class="navItem navItemDanger"/>
+                        </VBox>
+                    </VBox>
+                </VBox>
+
+                <!-- Main Content Area -->
+                <VBox id="mainContent" class="sapUiMediumMargin">
+                    <!-- Welcome Section -->
+                    <Panel id="welcomePanel" headerText="Welcome Back!" class="sapUiMediumMarginBottom">
+                        <content>
+                            <VBox id="welcomeBox" class="sapUiMediumMargin">
+                                <Title id="welcomeTitle" text="Hello, {/employee/firstName} {/employee/lastName}!" level="H2"/>
+                                <Text id="welcomeDeptText" text="Department: {/employee/department}"/>
+                                <Text id="roleText" text="Role: {/employee/role}"/>
+                                <Text id="currentDate" text="{/currentDate}"/>
+                            </VBox>
+                        </content>
+                    </Panel>
+
+                    <!-- My Tasks Section -->
+                    <Panel id="myTasksPanel" headerText="My Tasks" class="sapUiMediumMarginBottom">
+                        <content>
+                            <List id="tasksList" items="{/myTasks}" noDataText="No tasks assigned">
+                                <StandardListItem id="taskListItem"
+                                    title="{title}"
+                                    description="{description}"
+                                    info="{priority}"
+                                    type="Active"
+                                    press="onTaskPress"/>
+                            </List>
+                        </content>
+                    </Panel>
+
+                    <!-- Recent Activities -->
+                    <Panel id="activitiesPanel" headerText="Recent Activities" class="sapUiMediumMarginBottom">
+                        <content>
+                            <List id="activitiesList" items="{/recentActivities}" noDataText="No recent activities">
+                                <StandardListItem id="activityItem"
+                                    title="{title}"
+                                    description="{description}"
+                                    info="{timestamp}"
+                                    type="Inactive"/>
+                            </List>
+                        </content>
+                    </Panel>
+                </VBox>
+            </HBox>
+        </content>
+    </Page>
+</mvc:View>

@@ -1,0 +1,4 @@
+ID,firstName,lastName,email,department,startDate,status,mentor_ID
+1,Alice,Wilson,alice.wilson@company.com,Software Engineering,2024-01-15,Active,1
+2,Bob,Davis,bob.davis@company.com,Marketing,2024-01-20,Active,2
+3,Carol,Miller,carol.miller@company.com,Software Engineering,2024-02-01,Active,1
