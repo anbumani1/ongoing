@@ -36,12 +36,7 @@
                             <Button id="feedbackNavItem" text="Feedback" press="onFeedbackAccess" icon="sap-icon://feedback" class="navItem"/>
                         </VBox>
 
-                        <!-- AI Assistant -->
-                        <VBox id="aiGroup" class="navGroup">
-                            <Text id="aiLabel" text="AI ASSISTANT" class="navGroupLabel"/>
-                            <Button id="aiRecommendationsItem" text="AI Learning Recommendations" press="onGetAIRecommendations" icon="sap-icon://learning-assistant" class="navItem"/>
-                            <Button id="aiTaskHelpItem" text="AI Task Help" press="onGetAITaskHelp" icon="sap-icon://sys-help-2" class="navItem"/>
-                        </VBox>
+
 
                         <!-- Settings -->
                         <VBox id="settingsGroup" class="navGroup">

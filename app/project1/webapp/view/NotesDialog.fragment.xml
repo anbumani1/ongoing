@@ -1,117 +1,128 @@
 <core:FragmentDefinition
     xmlns="sap.m"
     xmlns:core="sap.ui.core"
-    xmlns:f="sap.ui.layout.form">
-    <Dialog id="notesDialog" title="My Notes Workspace" contentWidth="900px" contentHeight="700px" resizable="true">
+    xmlns:f="sap.ui.layout.form"
+    xmlns:html="http://www.w3.org/1999/xhtml">
+    <Dialog id="notesDialog" title="📝 My Notes" contentWidth="1400px" contentHeight="900px" resizable="true" class="notion-dialog">
         <content>
-            <HBox id="notesMainContainer" class="sapUiNoMargin">
-                <!-- Notes Sidebar -->
-                <VBox id="notesSidebar" width="250px" class="sapUiMediumMarginEnd">
-                    <Panel id="notesListPanel" headerText="My Notes">
-                        <headerToolbar>
-                            <Toolbar id="notesToolbar">
-                                <Title id="notesListTitle" text="Notes"/>
-                                <ToolbarSpacer id="notesToolbarSpacer"/>
-                                <Button id="addNoteBtn" icon="sap-icon://add" type="Transparent" press="onAddNote" tooltip="Add New Note"/>
-                            </Toolbar>
-                        </headerToolbar>
-                        <content>
-                            <List id="notesList" items="{/notes}" mode="SingleSelect" selectionChange="onNoteSelect">
-                                <CustomListItem id="noteListItem" type="Active">
-                                    <content>
-                                        <VBox id="noteItemBox" class="sapUiMediumMargin">
-                                            <Title id="noteItemTitle" text="{title}" level="H6" class="sapUiTinyMarginBottom"/>
-                                            <Text id="noteItemPreview" text="{preview}" maxLines="2" class="sapUiContentLabelColor sapUiTinyMarginBottom"/>
-                                            <HBox id="noteItemMeta" justifyContent="SpaceBetween" class="sapUiTinyMarginTop">
-                                                <VBox id="noteItemStats">
-                                                    <Text id="noteItemCategory" text="{category}" class="sapUiContentLabelColor"/>
-                                                    <Text id="noteItemWordCount" text="{wordCount} words" class="sapUiContentLabelColor"/>
-                                                </VBox>
-                                                <Text id="noteItemModified" text="{lastModified}" class="sapUiContentLabelColor"/>
-                                            </HBox>
-                                        </VBox>
-                                    </content>
-                                    <customData>
-                                        <core:CustomData id="noteData" key="noteId" value="{id}"/>
-                                    </customData>
-                                </CustomListItem>
-                            </List>
-                        </content>
-                    </Panel>
+            <HBox id="notesMainContainer" class="sapUiNoMargin notion-main-container">
+                <!-- Clean Sidebar -->
+                <VBox id="notesSidebar" width="320px" class="notion-sidebar">
+                    <!-- Header with New Button -->
+                    <HBox id="sidebarHeader" justifyContent="SpaceBetween" alignItems="Center" class="notion-sidebar-header">
+                        <Title id="sidebarTitle" text="My Notes" level="H4" class="notion-sidebar-title"/>
+                        <Button id="addNoteBtn"
+                                text="+ New"
+                                type="Emphasized"
+                                press="onAddNote"
+                                class="notion-new-btn"/>
+                    </HBox>
 
-                    <!-- Tags Panel -->
-                    <Panel id="tagsPanel" headerText="Tags & Categories" class="sapUiTinyMarginTop">
-                        <content>
-                            <VBox id="tagsContainer" class="sapUiTinyMargin">
-                                <ComboBox id="categoryFilter" placeholder="Filter by category" items="{/categories}" selectionChange="onCategoryFilter" class="sapUiTinyMarginBottom">
-                                    <core:Item id="categoryItem" key="{}" text="{}"/>
-                                </ComboBox>
-                                <Input id="newTagInput" placeholder="Add new tag..." submit="onAddTag" class="sapUiTinyMarginBottom"/>
-                                <ScrollContainer id="tagsScrollContainer" height="150px">
-                                    <VBox id="tagsBox" class="sapUiTinyMarginTop">
-                                        <Text id="tagsLabel" text="Available Tags:" class="sapUiTinyMarginBottom"/>
-                                        <HBox id="tagsButtonsBox" wrap="Wrap">
-                                            <!-- Tags will be populated dynamically -->
-                                        </HBox>
-                                    </VBox>
-                                </ScrollContainer>
-                            </VBox>
-                        </content>
-                    </Panel>
+                    <!-- Search -->
+                    <SearchField id="notesSearch"
+                                placeholder="Search notes..."
+                                width="100%"
+                                class="notion-search"
+                                liveChange="onSearchNotes"/>
+
+                    <!-- Notes List -->
+                    <List id="notesList"
+                          items="{/notes}"
+                          mode="SingleSelect"
+                          selectionChange="onNoteSelect"
+                          class="notion-notes-list"
+                          noDataText="No notes yet. Click '+ New' to get started!">
+                        <CustomListItem id="noteListItem" type="Active" class="notion-note-item">
+                            <content>
+                                <VBox id="noteItemBox" class="notion-note-content">
+                                    <Text id="noteItemTitle"
+                                          text="{title}"
+                                          class="notion-note-title"
+                                          maxLines="1"/>
+                                    <Text id="noteItemPreview"
+                                          text="{preview}"
+                                          maxLines="2"
+                                          class="notion-note-preview"/>
+                                    <Text id="noteItemDate" text="{lastModified}" class="notion-date"/>
+                                </VBox>
+                            </content>
+                            <customData>
+                                <core:CustomData id="noteData" key="noteId" value="{id}"/>
+                            </customData>
+                        </CustomListItem>
+                    </List>
                 </VBox>
 
-                <!-- Note Editor -->
-                <VBox id="noteEditor" class="sapUiNoMargin">
-                    <Panel id="editorPanel" headerText="Note Editor">
-                        <headerToolbar>
-                            <Toolbar id="editorToolbar">
-                                <Input id="noteTitleInput" value="{/currentNote/title}" placeholder="Note title..." width="300px"/>
-                                <ToolbarSpacer id="editorToolbarSpacer"/>
-                                <Button id="saveNoteBtn" text="Save" type="Emphasized" press="onSaveNote" icon="sap-icon://save"/>
-                                <Button id="deleteNoteBtn" text="Delete" type="Transparent" press="onDeleteNote" icon="sap-icon://delete"/>
-                            </Toolbar>
-                        </headerToolbar>
-                        <content>
-                            <VBox id="editorContent" class="sapUiMediumMargin">
-                                <!-- Formatting Toolbar -->
-                                <Toolbar id="formatToolbar" class="sapUiTinyMarginBottom">
-                                    <Button id="boldBtn" icon="sap-icon://bold-text" type="Transparent" press="onFormatText" tooltip="Bold"/>
-                                    <Button id="italicBtn" icon="sap-icon://italic-text" type="Transparent" press="onFormatText" tooltip="Italic"/>
-                                    <Button id="underlineBtn" icon="sap-icon://underline-text" type="Transparent" press="onFormatText" tooltip="Underline"/>
-                                    <ToolbarSeparator id="formatSeparator1"/>
-                                    <Button id="bulletListBtn" icon="sap-icon://bullet-text" type="Transparent" press="onFormatText" tooltip="Bullet List"/>
-                                    <Button id="numberedListBtn" icon="sap-icon://numbered-text" type="Transparent" press="onFormatText" tooltip="Numbered List"/>
-                                    <ToolbarSeparator id="formatSeparator2"/>
-                                    <Button id="linkBtn" icon="sap-icon://chain-link" type="Transparent" press="onAddLink" tooltip="Add Link"/>
-                                    <Button id="imageBtn" icon="sap-icon://picture" type="Transparent" press="onAddImage" tooltip="Add Image"/>
-                                </Toolbar>
+                <!-- Main Editor Area -->
+                <VBox id="editorArea" class="notion-editor-area">
+                    <!-- Welcome State (when no note selected) -->
+                    <VBox id="welcomeState" visible="{= !${/currentNote/id}}" class="notion-welcome-state">
+                        <core:Icon id="welcomeStateIcon" src="sap-icon://document-text" size="4rem" color="#ddd" class="notion-welcome-icon"/>
+                        <Title id="welcomeStateTitle" text="Select a note to start editing" level="H3" class="notion-welcome-title"/>
+                        <Text id="welcomeStateText" text="Choose a note from the sidebar or create a new one." class="notion-welcome-text"/>
+                        <Button id="welcomeStateCreateBtn" text="+ Create Your First Note"
+                                type="Emphasized"
+                                press="onAddNote"
+                                class="notion-welcome-btn"/>
+                    </VBox>
 
-                                <!-- Text Editor -->
-                                <TextArea id="noteContentEditor" 
-                                    value="{/currentNote/content}" 
-                                    rows="20" 
-                                    width="100%" 
-                                    placeholder="Start writing your note here...&#10;&#10;Tips:&#10;• Use markdown-like syntax&#10;• # for headers&#10;• - for bullet points&#10;• ** for bold text&#10;• * for italic text"/>
+                    <!-- Editor State (when note is selected) -->
+                    <VBox id="editorState" visible="{= !!${/currentNote/id}}" class="notion-editor-state">
+                        <!-- Note Title -->
+                        <Input id="noteTitleInput"
+                               value="{/currentNote/title}"
+                               placeholder="Untitled"
+                               class="notion-title-input"
+                               liveChange="onTitleChange"/>
 
-                                <!-- Note Metadata -->
-                                <HBox id="noteMetadata" class="sapUiTinyMarginTop" justifyContent="SpaceBetween">
-                                    <VBox id="noteInfo">
-                                        <Text id="createdDate" text="Created: {/currentNote/created}" class="sapUiContentLabelColor"/>
-                                        <Text id="modifiedDate" text="Last Modified: {/currentNote/lastModified}" class="sapUiContentLabelColor"/>
-                                    </VBox>
-                                    <VBox id="noteStats">
-                                        <Text id="wordCount" text="Words: {/currentNote/wordCount}" class="sapUiContentLabelColor"/>
-                                        <Text id="charCount" text="Characters: {/currentNote/charCount}" class="sapUiContentLabelColor"/>
-                                    </VBox>
-                                </HBox>
+                        <!-- Simple Toolbar -->
+                        <HBox id="simpleToolbar" alignItems="Center" class="notion-simple-toolbar">
+                            <Button id="addTextBtn" text="Text" icon="sap-icon://text" type="Default" press="onAddParagraph" class="notion-tool-btn"/>
+                            <Button id="addHeadingBtn" text="Heading" icon="sap-icon://header" type="Default" press="onAddHeading" class="notion-tool-btn"/>
+                            <Button id="addListBtn" text="List" icon="sap-icon://list" type="Default" press="onAddList" class="notion-tool-btn"/>
+                            <Button id="addTodoBtn" text="Todo" icon="sap-icon://task" type="Default" press="onAddTodo" class="notion-tool-btn"/>
+                            <ToolbarSpacer id="toolbarSpacer"/>
+                            <Text id="autoSaveStatus" text="✅ Saved" class="notion-save-status"/>
+                        </HBox>
+
+                        <!-- Content Area -->
+                        <ScrollContainer id="contentScrollContainer" height="600px" class="notion-content-area">
+                            <VBox id="contentContainer" class="notion-content-container">
+                                <!-- Dynamic Blocks Container -->
+                                <VBox id="dynamicBlocksContainer" class="notion-blocks">
+                                    <!-- Blocks will be rendered here -->
+                                </VBox>
+
+                                <!-- Add Content Button -->
+                                <Button id="addContentBtn"
+                                        text="+ Add content"
+                                        type="Transparent"
+                                        press="onAddBlock"
+                                        class="notion-add-content-btn"/>
                             </VBox>
-                        </content>
-                    </Panel>
+                        </ScrollContainer>
+
+                        <!-- Bottom Actions -->
+                        <HBox id="bottomActions" justifyContent="SpaceBetween" alignItems="Center" class="notion-bottom-actions">
+                            <HBox id="leftActions" alignItems="Center">
+                                <Text id="wordCountDisplay" text="{/currentNote/wordCount} words" class="notion-word-count"/>
+                                <Text id="lastModifiedDisplay" text="Last edited {/currentNote/lastModified}" class="notion-last-modified"/>
+                            </HBox>
+                            <HBox id="rightActions" alignItems="Center">
+                                <Button id="deleteNoteBtn"
+                                        icon="sap-icon://delete"
+                                        type="Transparent"
+                                        press="onDeleteNote"
+                                        tooltip="Delete note"
+                                        class="notion-delete-btn"/>
+                            </HBox>
+                        </HBox>
+                    </VBox>
                 </VBox>
             </HBox>
         </content>
-        <endButton>
+        <buttons>
             <Button id="closeNotesBtn" text="Close" press="onCloseNotesDialog"/>
-        </endButton>
+        </buttons>
     </Dialog>
 </core:FragmentDefinition>

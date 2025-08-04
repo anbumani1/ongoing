@@ -76,6 +76,12 @@
       "css": [
         {
           "uri": "css/style.css"
+        },
+        {
+          "uri": "css/notion-notes.css"
+        },
+        {
+          "uri": "css/it-support.css"
         }
       ]
     },

@@ -59,4 +59,39 @@ service InternOnboardingService {
         timestamp: String;
         success: Boolean;
     };
+
+    // Email service actions
+    action sendSupportTicketEmail(
+        ticketId: String,
+        userEmail: String,
+        userName: String,
+        issue: String,
+        priority: String
+    ) returns {
+        success: Boolean;
+        messageId: String;
+        message: String;
+        error: String;
+    };
+
+    action sendWelcomeEmail(
+        userEmail: String,
+        userName: String,
+        department: String
+    ) returns {
+        success: Boolean;
+        messageId: String;
+        message: String;
+        error: String;
+    };
+
+    action getEmailStatus() returns {
+        success: Boolean;
+        status: {
+            initialized: Boolean;
+            domain: String;
+            apiKeyConfigured: Boolean;
+        };
+        error: String;
+    };
 }

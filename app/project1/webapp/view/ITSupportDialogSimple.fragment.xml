@@ -1,0 +1,72 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+    <Dialog id="itSupportDialogSimple" title="🛠️ IT Support Center" contentWidth="600px" contentHeight="500px" resizable="true">
+        <content>
+            <VBox class="sapUiMediumMargin">
+                <Title text="🚀 IT Support Actions" level="H3" class="sapUiMediumMarginBottom"/>
+
+                <!-- Quick Action Buttons -->
+                <HBox wrap="Wrap" class="sapUiMediumMarginBottom">
+                    <Button text="📧 Test Email" type="Emphasized" press="onTestEmailService" class="sapUiTinyMargin"/>
+                    <Button text="📝 Submit Ticket" type="Default" press="onQuickSubmitTicket" class="sapUiTinyMargin"/>
+                    <Button text="📊 Email Status" type="Default" press="onCheckEmailStatus" class="sapUiTinyMargin"/>
+                    <Button text="🚨 Emergency" type="Reject" press="onEmergencyContact" class="sapUiTinyMargin"/>
+                </HBox>
+
+                <!-- Quick Ticket Form -->
+                <Panel headerText="📝 Quick Support Ticket" expandable="true" expanded="false" class="sapUiMediumMarginTop">
+                    <content>
+                        <VBox class="sapUiSmallMargin">
+                            <Label text="Your Name *"/>
+                            <Input id="quickUserName" value="Alice Wilson"/>
+
+                            <Label text="Email *" class="sapUiTinyMarginTop"/>
+                            <Input id="quickUserEmail" value="anbum2187@gmail.com"/>
+
+                            <Label text="Issue Subject *" class="sapUiTinyMarginTop"/>
+                            <Input id="quickSubject" placeholder="Brief description of the issue"/>
+
+                            <Label text="Priority" class="sapUiTinyMarginTop"/>
+                            <Select id="quickPriority" selectedKey="Medium">
+                                <core:Item key="Low" text="🟢 Low"/>
+                                <core:Item key="Medium" text="🟡 Medium"/>
+                                <core:Item key="High" text="🔴 High"/>
+                                <core:Item key="Critical" text="🚨 Critical"/>
+                            </Select>
+
+                            <Label text="Description *" class="sapUiTinyMarginTop"/>
+                            <TextArea id="quickDescription" rows="3" placeholder="Describe your issue..."/>
+
+                            <HBox justifyContent="End" class="sapUiMediumMarginTop">
+                                <Button text="📝 Submit Ticket" type="Emphasized" press="onSubmitQuickTicket"/>
+                            </HBox>
+                        </VBox>
+                    </content>
+                </Panel>
+
+                <!-- Contact Information -->
+                <Panel headerText="📞 Contact Information" expandable="true" expanded="true" class="sapUiMediumMarginTop">
+                    <content>
+                        <VBox class="sapUiSmallMargin">
+                            <HBox alignItems="Center" class="sapUiTinyMarginBottom">
+                                <Text text="📞 Help Desk: +1 (555) 123-4567" class="sapUiMediumMarginEnd"/>
+                                <Button text="Call" type="Transparent" press="onCallHelpDesk"/>
+                            </HBox>
+                            <HBox alignItems="Center" class="sapUiTinyMarginBottom">
+                                <Text text="📧 Email: itsupport@company.com" class="sapUiMediumMarginEnd"/>
+                                <Button text="Email" type="Transparent" press="onSendEmail"/>
+                            </HBox>
+                            <HBox alignItems="Center" class="sapUiTinyMarginBottom">
+                                <Text text="🌐 Portal: support.company.com" class="sapUiMediumMarginEnd"/>
+                                <Button text="Open" type="Transparent" press="onOpenPortal"/>
+                            </HBox>
+                            <Text text="🚨 Emergency: Available 24/7" class="emergency-text"/>
+                        </VBox>
+                    </content>
+                </Panel>
+            </VBox>
+        </content>
+        <buttons>
+            <Button text="Close" press="onCloseITSupportDialog"/>
+        </buttons>
+    </Dialog>
+</core:FragmentDefinition>

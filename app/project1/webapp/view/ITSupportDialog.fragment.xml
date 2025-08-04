@@ -1,0 +1,171 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:f="sap.ui.layout.form">
+    <Dialog id="itSupportDialog" title="🛠️ IT Support Center" contentWidth="900px" contentHeight="700px" resizable="true" class="it-support-dialog">
+        <content>
+            <VBox id="itSupportMainContainer" class="sapUiMediumMargin">
+                <!-- Header Section -->
+                <VBox id="itSupportHeader" class="it-support-header">
+                    <Title id="itSupportTitle" text="IT Support Center" level="H2" class="it-support-title"/>
+                    <Text id="itSupportSubtitle" text="Get help with technical issues, software problems, and IT requests" class="it-support-subtitle"/>
+                </VBox>
+
+                <!-- Quick Actions -->
+                <VBox id="quickActionsSection" class="it-support-section">
+                    <Title id="quickActionsTitle" text="Quick Actions" level="H3" class="section-title"/>
+                    <HBox id="quickActionsContainer" wrap="Wrap" class="quick-actions-container">
+                        <!-- Test Button -->
+                        <Button id="testBtn"
+                                text="🧪 Test Button"
+                                icon="sap-icon://accept"
+                                type="Success"
+                                press="onTestButton"
+                                class="quick-action-btn"/>
+
+                        <Button id="submitTicketBtn"
+                                text="Submit Support Ticket"
+                                icon="sap-icon://create"
+                                type="Emphasized"
+                                press="onSubmitTicket"
+                                class="quick-action-btn"/>
+                        <Button id="chatSupportBtn"
+                                text="Live Chat Support"
+                                icon="sap-icon://discussion-2"
+                                type="Default"
+                                press="onLiveChatSupport"
+                                class="quick-action-btn"/>
+                        <Button id="remoteAssistanceBtn"
+                                text="Remote Assistance"
+                                icon="sap-icon://monitor-payments"
+                                type="Default"
+                                press="onRemoteAssistance"
+                                class="quick-action-btn"/>
+                        <Button id="phoneCallBtn"
+                                text="Call IT Support"
+                                icon="sap-icon://phone"
+                                type="Default"
+                                press="onCallSupport"
+                                class="quick-action-btn"/>
+                    </HBox>
+                </VBox>
+
+                <!-- Common Issues -->
+                <VBox id="commonIssuesSection" class="it-support-section">
+                    <Title id="commonIssuesTitle" text="Common Issues" level="H3" class="section-title"/>
+                    <List id="commonIssuesList" class="common-issues-list">
+                        <StandardListItem id="passwordResetItem" 
+                                        title="Password Reset" 
+                                        description="Reset your Windows, email, or application passwords"
+                                        icon="sap-icon://key"
+                                        type="Active"
+                                        press="onPasswordReset"/>
+                        <StandardListItem id="softwareInstallItem" 
+                                        title="Software Installation" 
+                                        description="Request installation of approved software applications"
+                                        icon="sap-icon://download"
+                                        type="Active"
+                                        press="onSoftwareInstall"/>
+                        <StandardListItem id="networkIssuesItem" 
+                                        title="Network & WiFi Issues" 
+                                        description="Troubleshoot internet connectivity problems"
+                                        icon="sap-icon://wifi"
+                                        type="Active"
+                                        press="onNetworkIssues"/>
+                        <StandardListItem id="emailProblemsItem" 
+                                        title="Email Problems" 
+                                        description="Fix Outlook, email sync, or configuration issues"
+                                        icon="sap-icon://email"
+                                        type="Active"
+                                        press="onEmailProblems"/>
+                        <StandardListItem id="hardwareIssuesItem" 
+                                        title="Hardware Issues" 
+                                        description="Report problems with laptop, monitor, or peripherals"
+                                        icon="sap-icon://laptop"
+                                        type="Active"
+                                        press="onHardwareIssues"/>
+                        <StandardListItem id="vpnAccessItem" 
+                                        title="VPN Access" 
+                                        description="Setup or troubleshoot VPN connections"
+                                        icon="sap-icon://shield"
+                                        type="Active"
+                                        press="onVPNAccess"/>
+                    </List>
+                </VBox>
+
+                <!-- Contact Information -->
+                <VBox id="contactInfoSection" class="it-support-section">
+                    <Title id="contactInfoTitle" text="Contact Information" level="H3" class="section-title"/>
+                    <VBox id="contactDetails" class="contact-details">
+                        <HBox id="phoneContact" alignItems="Center" class="contact-item">
+                            <core:Icon id="phoneIcon" src="sap-icon://phone" size="1.2rem" color="#007bff" class="contact-icon"/>
+                            <VBox id="phoneInfo">
+                                <Text id="phoneLabel" text="IT Support Hotline" class="contact-label"/>
+                                <Text id="phoneNumber" text="+1 (555) 123-4567" class="contact-value"/>
+                                <Text id="phoneHours" text="Available 24/7 for urgent issues" class="contact-note"/>
+                            </VBox>
+                        </HBox>
+                        
+                        <HBox id="emailContact" alignItems="Center" class="contact-item">
+                            <core:Icon id="emailIcon" src="sap-icon://email" size="1.2rem" color="#007bff" class="contact-icon"/>
+                            <VBox id="emailInfo">
+                                <Text id="emailLabel" text="Email Support" class="contact-label"/>
+                                <Text id="emailAddress" text="itsupport@company.com" class="contact-value"/>
+                                <Text id="emailResponse" text="Response within 4 hours during business hours" class="contact-note"/>
+                            </VBox>
+                        </HBox>
+                        
+                        <HBox id="locationContact" alignItems="Center" class="contact-item">
+                            <core:Icon id="locationIcon" src="sap-icon://map-2" size="1.2rem" color="#007bff" class="contact-icon"/>
+                            <VBox id="locationInfo">
+                                <Text id="locationLabel" text="IT Support Office" class="contact-label"/>
+                                <Text id="locationAddress" text="Building A, Floor 2, Room 205" class="contact-value"/>
+                                <Text id="locationHours" text="Mon-Fri: 8:00 AM - 6:00 PM" class="contact-note"/>
+                            </VBox>
+                        </HBox>
+                    </VBox>
+                </VBox>
+
+                <!-- Knowledge Base -->
+                <VBox id="knowledgeBaseSection" class="it-support-section">
+                    <Title id="knowledgeBaseTitle" text="Self-Service Resources" level="H3" class="section-title"/>
+                    <HBox id="selfServiceResourcesContainer" wrap="Wrap" class="resources-container">
+                        <Button id="faqBtn" 
+                                text="FAQ" 
+                                icon="sap-icon://question-mark" 
+                                type="Default" 
+                                press="onOpenFAQ"
+                                class="resource-btn"/>
+                        <Button id="userGuidesBtn" 
+                                text="User Guides" 
+                                icon="sap-icon://document" 
+                                type="Default" 
+                                press="onOpenUserGuides"
+                                class="resource-btn"/>
+                        <Button id="videoTutorialsBtn" 
+                                text="Video Tutorials" 
+                                icon="sap-icon://video" 
+                                type="Default" 
+                                press="onOpenVideoTutorials"
+                                class="resource-btn"/>
+                        <Button id="systemStatusBtn"
+                                text="System Status"
+                                icon="sap-icon://status-positive"
+                                type="Default"
+                                press="onCheckSystemStatus"
+                                class="resource-btn"/>
+                        <Button id="emailInboxBtn"
+                                text="Email Inbox"
+                                icon="sap-icon://email"
+                                type="Default"
+                                press="onOpenEmailInbox"
+                                class="resource-btn"/>
+                    </HBox>
+                </VBox>
+            </VBox>
+        </content>
+        <buttons>
+            <Button id="closeITSupportBtn" text="Close" press="onCloseITSupportDialog"/>
+        </buttons>
+    </Dialog>
+</core:FragmentDefinition>

@@ -1,0 +1,270 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:f="sap.ui.layout.form">
+    <Dialog id="emailInboxDialog" title="📧 IT Support Email Inbox" contentWidth="1200px" contentHeight="800px" resizable="true" class="email-inbox-dialog">
+        <content>
+            <VBox id="emailInboxMainContainer" class="sapUiMediumMargin">
+                <!-- Header Section -->
+                <VBox id="emailInboxHeader" class="email-inbox-header">
+                    <HBox id="inboxHeaderTop" justifyContent="SpaceBetween" alignItems="Center">
+                        <Title id="inboxTitle" text="IT Support Email Inbox" level="H2" class="inbox-title"/>
+                        <HBox id="inboxActions" alignItems="Center">
+                            <Button id="refreshInboxBtn" 
+                                    icon="sap-icon://refresh" 
+                                    type="Default" 
+                                    press="onRefreshInbox"
+                                    tooltip="Refresh Inbox"
+                                    class="inbox-action-btn"/>
+                            <Button id="composeEmailBtn" 
+                                    text="Compose" 
+                                    icon="sap-icon://create" 
+                                    type="Emphasized" 
+                                    press="onComposeEmail"
+                                    class="inbox-action-btn"/>
+                        </HBox>
+                    </HBox>
+                    
+                    <!-- Inbox Statistics -->
+                    <HBox id="inboxStats" wrap="Wrap" class="inbox-stats">
+                        <VBox id="totalEmailsCard" class="stat-card">
+                            <Text id="totalEmailsCount" text="{/inboxStats/totalEmails}" class="stat-number"/>
+                            <Text id="totalEmailsLabel" text="Total Emails" class="stat-label"/>
+                        </VBox>
+                        <VBox id="unreadEmailsCard" class="stat-card unread">
+                            <Text id="unreadEmailsCount" text="{/inboxStats/unreadEmails}" class="stat-number"/>
+                            <Text id="unreadEmailsLabel" text="Unread" class="stat-label"/>
+                        </VBox>
+                        <VBox id="todayEmailsCard" class="stat-card">
+                            <Text id="todayEmailsCount" text="{/inboxStats/todayEmails}" class="stat-number"/>
+                            <Text id="todayEmailsLabel" text="Today" class="stat-label"/>
+                        </VBox>
+                        <VBox id="ticketsCreatedCard" class="stat-card">
+                            <Text id="ticketsCreatedCount" text="{/inboxStats/ticketsCreated}" class="stat-number"/>
+                            <Text id="ticketsCreatedLabel" text="Tickets Created" class="stat-label"/>
+                        </VBox>
+                    </HBox>
+                </VBox>
+
+                <!-- Filters and Search -->
+                <VBox id="emailFiltersSection" class="email-filters-section">
+                    <HBox id="emailFilters" alignItems="Center" wrap="Wrap" class="email-filters">
+                        <SearchField id="emailSearchField" 
+                                    placeholder="Search emails..." 
+                                    width="300px"
+                                    search="onSearchEmails"
+                                    class="email-search"/>
+                        
+                        <ComboBox id="categoryFilter" 
+                                placeholder="All Categories"
+                                items="{/emailCategories}"
+                                selectionChange="onCategoryFilter"
+                                class="filter-combo">
+                            <core:Item key="{key}" text="{text}"/>
+                        </ComboBox>
+                        
+                        <ComboBox id="priorityFilter" 
+                                placeholder="All Priorities"
+                                items="{/emailPriorities}"
+                                selectionChange="onPriorityFilter"
+                                class="filter-combo">
+                            <core:Item key="{key}" text="{text}"/>
+                        </ComboBox>
+                        
+                        <ComboBox id="statusFilter" 
+                                placeholder="All Status"
+                                items="{/emailStatuses}"
+                                selectionChange="onStatusFilter"
+                                class="filter-combo">
+                            <core:Item key="{key}" text="{text}"/>
+                        </ComboBox>
+                        
+                        <Button id="clearFiltersBtn" 
+                                text="Clear Filters" 
+                                type="Default" 
+                                press="onClearFilters"
+                                class="clear-filters-btn"/>
+                    </HBox>
+                </VBox>
+
+                <!-- Email List -->
+                <VBox id="emailListSection" class="email-list-section">
+                    <Table id="emailTable" 
+                           items="{/emails}" 
+                           mode="SingleSelect"
+                           selectionChange="onEmailSelect"
+                           class="email-table">
+                        <headerToolbar>
+                            <Toolbar id="emailTableToolbar">
+                                <Title id="emailTableTitle" text="Emails ({/emails/length})" level="H4"/>
+                                <ToolbarSpacer/>
+                                <Button id="markAllReadBtn" 
+                                        text="Mark All Read" 
+                                        icon="sap-icon://accept" 
+                                        type="Default" 
+                                        press="onMarkAllRead"
+                                        class="table-action-btn"/>
+                                <Button id="deleteSelectedBtn" 
+                                        text="Delete" 
+                                        icon="sap-icon://delete" 
+                                        type="Default" 
+                                        press="onDeleteSelected"
+                                        enabled="{= ${/selectedEmail} !== null}"
+                                        class="table-action-btn"/>
+                            </Toolbar>
+                        </headerToolbar>
+                        
+                        <columns>
+                            <Column id="statusColumn" width="60px">
+                                <Text text=""/>
+                            </Column>
+                            <Column id="fromColumn" width="200px">
+                                <Text text="From"/>
+                            </Column>
+                            <Column id="subjectColumn" minScreenWidth="Tablet">
+                                <Text text="Subject"/>
+                            </Column>
+                            <Column id="categoryColumn" width="120px" minScreenWidth="Desktop">
+                                <Text text="Category"/>
+                            </Column>
+                            <Column id="priorityColumn" width="100px" minScreenWidth="Desktop">
+                                <Text text="Priority"/>
+                            </Column>
+                            <Column id="receivedColumn" width="150px">
+                                <Text text="Received"/>
+                            </Column>
+                            <Column id="actionsColumn" width="120px">
+                                <Text text="Actions"/>
+                            </Column>
+                        </columns>
+                        
+                        <items>
+                            <ColumnListItem id="emailListItem" class="{= ${isRead} ? 'email-read' : 'email-unread'}" press="onEmailItemPress">
+                                <cells>
+                                    <!-- Status Indicator -->
+                                    <HBox id="statusCell" alignItems="Center">
+                                        <core:Icon id="readStatusIcon" 
+                                                  src="{= ${isRead} ? 'sap-icon://accept' : 'sap-icon://email'}" 
+                                                  color="{= ${isRead} ? '#28a745' : '#007bff'}"
+                                                  size="1rem"/>
+                                        <core:Icon id="priorityIcon" 
+                                                  src="{= ${priority} === 'High' ? 'sap-icon://warning' : ${priority} === 'Medium' ? 'sap-icon://notification' : ''}" 
+                                                  color="{= ${priority} === 'High' ? '#dc3545' : '#ffc107'}"
+                                                  size="0.8rem"
+                                                  class="sapUiTinyMarginBegin"/>
+                                    </HBox>
+                                    
+                                    <!-- From Email -->
+                                    <VBox id="fromCell">
+                                        <Text id="fromEmail" text="{fromEmail}" class="from-email"/>
+                                        <Text id="fromName" text="{fromName}" class="from-name"/>
+                                    </VBox>
+                                    
+                                    <!-- Subject -->
+                                    <VBox id="subjectCell">
+                                        <Text id="emailSubject" text="{subject}" class="email-subject" maxLines="1"/>
+                                        <Text id="emailPreview" text="{preview}" class="email-preview" maxLines="1"/>
+                                    </VBox>
+                                    
+                                    <!-- Category -->
+                                    <Text id="emailCategory" text="{category}" class="email-category"/>
+                                    
+                                    <!-- Priority -->
+                                    <ObjectStatus id="priorityStatus" 
+                                                text="{priority}" 
+                                                state="{= ${priority} === 'High' ? 'Error' : ${priority} === 'Medium' ? 'Warning' : 'Success'}"/>
+                                    
+                                    <!-- Received Date -->
+                                    <Text id="receivedDate" text="{receivedAt}" class="received-date"/>
+                                    
+                                    <!-- Actions -->
+                                    <HBox id="actionsCell" alignItems="Center">
+                                        <Button id="replyBtn" 
+                                                icon="sap-icon://reply" 
+                                                type="Transparent" 
+                                                press="onReplyEmail"
+                                                tooltip="Reply"
+                                                class="action-btn"/>
+                                        <Button id="createTicketBtn" 
+                                                icon="sap-icon://create-form" 
+                                                type="Transparent" 
+                                                press="onCreateTicket"
+                                                tooltip="Create Ticket"
+                                                class="action-btn"/>
+                                    </HBox>
+                                </cells>
+                            </ColumnListItem>
+                        </items>
+                    </Table>
+                </VBox>
+
+                <!-- Email Preview Panel -->
+                <VBox id="emailPreviewSection" visible="{= ${/selectedEmail} !== null}" class="email-preview-section">
+                    <VBox id="emailPreviewHeader" class="email-preview-header">
+                        <HBox id="previewHeaderTop" justifyContent="SpaceBetween" alignItems="Center">
+                            <Title id="previewTitle" text="Email Preview" level="H4"/>
+                            <Button id="closePreviewBtn" 
+                                    icon="sap-icon://decline" 
+                                    type="Transparent" 
+                                    press="onClosePreview"
+                                    tooltip="Close Preview"/>
+                        </HBox>
+                        
+                        <VBox id="emailDetails" class="email-details">
+                            <HBox id="emailFromTo" justifyContent="SpaceBetween">
+                                <VBox id="emailFromInfo">
+                                    <Text id="previewFromLabel" text="From:" class="detail-label"/>
+                                    <Text id="previewFromValue" text="{/selectedEmail/fromEmail}" class="detail-value"/>
+                                </VBox>
+                                <VBox id="emailToInfo">
+                                    <Text id="previewToLabel" text="To:" class="detail-label"/>
+                                    <Text id="previewToValue" text="{/selectedEmail/toEmail}" class="detail-value"/>
+                                </VBox>
+                            </HBox>
+                            
+                            <VBox id="emailSubjectInfo">
+                                <Text id="previewSubjectLabel" text="Subject:" class="detail-label"/>
+                                <Text id="previewSubjectValue" text="{/selectedEmail/subject}" class="detail-value"/>
+                            </VBox>
+                            
+                            <HBox id="emailMetaInfo" justifyContent="SpaceBetween">
+                                <Text id="previewReceivedValue" text="Received: {/selectedEmail/receivedAt}" class="detail-meta"/>
+                                <Text id="previewCategoryValue" text="Category: {/selectedEmail/category}" class="detail-meta"/>
+                            </HBox>
+                        </VBox>
+                    </VBox>
+                    
+                    <ScrollContainer id="emailContentContainer" height="300px" class="email-content-container">
+                        <VBox id="emailContent" class="email-content">
+                            <core:HTML id="emailHTMLContent" content="{/selectedEmail/htmlContent}" class="email-html-content"/>
+                        </VBox>
+                    </ScrollContainer>
+                    
+                    <HBox id="emailActions" justifyContent="End" alignItems="Center" class="email-actions">
+                        <Button id="replyEmailBtn" 
+                                text="Reply" 
+                                icon="sap-icon://reply" 
+                                type="Default" 
+                                press="onReplyEmail"
+                                class="email-action-btn"/>
+                        <Button id="forwardEmailBtn" 
+                                text="Forward" 
+                                icon="sap-icon://forward" 
+                                type="Default" 
+                                press="onForwardEmail"
+                                class="email-action-btn"/>
+                        <Button id="createTicketFromEmailBtn" 
+                                text="Create Ticket" 
+                                icon="sap-icon://create-form" 
+                                type="Emphasized" 
+                                press="onCreateTicketFromEmail"
+                                class="email-action-btn"/>
+                    </HBox>
+                </VBox>
+            </VBox>
+        </content>
+        <buttons>
+            <Button id="closeEmailInboxBtn" text="Close" press="onCloseEmailInboxDialog"/>
+        </buttons>
+    </Dialog>
+</core:FragmentDefinition>

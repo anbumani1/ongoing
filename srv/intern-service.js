@@ -1,5 +1,6 @@
 const cds = require('@sap/cds');
 const GoogleAIService = require('./google-ai-service');
+const emailHelper = require('./email-helper');
 
 module.exports = cds.service.impl(async function() {
 
@@ -122,6 +123,70 @@ module.exports = cds.service.impl(async function() {
         } catch (error) {
             console.error('❌ Chatbot API error:', error);
             req.error(500, 'Internal server error: ' + error.message);
+        }
+    });
+
+    // Email service actions
+    this.on('sendSupportTicketEmail', async (req) => {
+        try {
+            const { ticketId, userEmail, userName, issue, priority } = req.data;
+
+            console.log('📧 Sending support ticket email:', { ticketId, userEmail, userName });
+
+            const result = await emailHelper.sendSupportTicketEmail({
+                ticketId,
+                userEmail,
+                userName,
+                issue,
+                priority
+            });
+
+            return result;
+        } catch (error) {
+            console.error('❌ Support ticket email error:', error);
+            return {
+                success: false,
+                error: error.message
+            };
+        }
+    });
+
+    this.on('sendWelcomeEmail', async (req) => {
+        try {
+            const { userEmail, userName, department } = req.data;
+
+            console.log('📧 Sending welcome email:', { userEmail, userName, department });
+
+            const result = await emailHelper.sendWelcomeEmail({
+                userEmail,
+                userName,
+                department
+            });
+
+            return result;
+        } catch (error) {
+            console.error('❌ Welcome email error:', error);
+            return {
+                success: false,
+                error: error.message
+            };
+        }
+    });
+
+    this.on('getEmailStatus', async (req) => {
+        try {
+            const status = emailHelper.getStatus();
+            console.log('📊 Email service status:', status);
+            return {
+                success: true,
+                status
+            };
+        } catch (error) {
+            console.error('❌ Email status error:', error);
+            return {
+                success: false,
+                error: error.message
+            };
         }
     });
 
